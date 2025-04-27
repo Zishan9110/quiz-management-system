@@ -16,6 +16,8 @@ export const generateToken = (user, message, statusCode, res) => {
   const options = {
     expires: new Date(Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
     httpOnly: true,
+    sameSite: "None",
+    secure: true,
   };
 
   console.log("Generated token:", token); // Debugging

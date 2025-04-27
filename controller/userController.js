@@ -106,6 +106,8 @@ export const logout = catchAsyncErrors(async (req, res, next) => {
        .cookie("token", null, {
            expires: new Date(Date.now()), // Expire the cookie immediately
            httpOnly: true,
+           sameSite: "None",
+           secure: true,
        })
        .json({
            success: true,
