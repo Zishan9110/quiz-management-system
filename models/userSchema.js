@@ -5,53 +5,52 @@ import crypto from "crypto";
 
 const userSchema = new mongoose.Schema({
     fullName: {
-      type: String,
-      required: [true, "Name Required!"],
+        type: String,
+        required: [true, "Name Required!"],
     },
     email: {
-      type: String,
-      required: [true, "Email Required!"],
-      unique: true,
-      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Please enter a valid email address"],
+        type: String,
+        required: [true, "Email Required!"],
+        unique: true,
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Please enter a valid email address"],
     },
     phone: {
-      type: String,
-      required: [true, "Phone Number Required!"],
-      match: [/^\d{10}$/, "Please enter a valid 10-digit phone number"],
+        type: String,
+        required: [true, "Phone Number Required!"],
+        match: [/^\d{10}$/, "Please enter a valid 10-digit phone number"],
     },
     password: {
-      type: String,
-      required: [true, "Password Is Required!"],
-      minLength: [8, "Password must contain at least 8 characters"],
-      select: false,
+        type: String,
+        required: [true, "Password Is Required!"],
+        minLength: [4, "Password must contain at least 4 characters"],
+        select: false,
     },
     role: {
-      type: String,
-      enum: ["admin", "student", "teacher"],
-      default: "student",
-      required: true,
+        type: String,
+        enum: ["admin", "student", "teacher"],
+        default: "student",
+        required: true,
     },
-    // Student-specific fields (optional)
     rollNo: {
-      type: String,
+        type: String,
     },
     branch: {
-      type: String,
+        type: String,
     },
     section: {
-      type: String,
+        type: String,
     },
     avatar: {
-      public_id: {
-        type: String,
-        default: "",
-      },
-      url: {
-        type: String,
-        default: "",
-      },
+        public_id: {
+            type: String,
+            default: "",
+        },
+        url: {
+            type: String,
+            default: "",
+        },
     },
-  }, { timestamps: true });
+}, { timestamps: true });
 
 userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) {
@@ -73,7 +72,7 @@ userSchema.methods.generateJsonWebToken = function () {
 userSchema.methods.getResetPasswordToken = function(){
     const resetToken = crypto.randomBytes(20).toString("hex");
     this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
-    this.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 minutes
+    this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
     return resetToken;
 };
 
